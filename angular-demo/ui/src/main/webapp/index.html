@@ -8,41 +8,61 @@
 	var listApp = angular.module('listApp', []);
 	listApp.controller('listCtrl', function($scope, $http) {
 
-		$http.get('/findAll').success(function(data) {
-			$scope.persons = data;
-		});
+		
 
 		var selectedPerson = null;
 
 		$scope.addPerson = function() {
+			deselectAll();
 			var person = {
+				id : null,
+				firstName : '',
+				lastName : '',
+				phone : '',
+				email : ''
+			};
+
+			selectedPerson = person;
+			$scope.editSelected();
+		};
+		
+		$scope.refreshData = function() {
+			$http.get('/findAll').success(function(data) {
+				$scope.persons = data;
+			});
+		};
+		
+		$scope.savePerson = function() {
+			var person = {
+				id : $scope.id,
 				firstName : $scope.firstName,
 				lastName : $scope.lastName,
 				phone : $scope.phone,
 				email : $scope.email
 			};
+			
 
-			$http.post('/addPerson', person).success(function(data, status, headers, config) {
-				$scope.persons.push(data);
+			$http.post('/savePerson', person).success(function(data, status, headers, config) {
+				if(person.id == null) {
+					$scope.persons.push(data);
+				} else {
+					$scope.refreshData();
+				}
+				deselectAll();
 			});
 		};
 		
 		$scope.deleteSelected = function() {
 			$http.post('/removePerson', selectedPerson.id).success(function(data, status, headers, config) {
 				selectedPerson = null;
-				$http.get('/findAll').success(function(data) {
-					$scope.persons = data;
-				});
+				$scope.refreshData();
 			});
 		}
 
 		var deselectAll = function() {
-			$scope.persons.forEach(function(person) {
-				person.selected = false;
-			});
-
 			selectedPerson = null;
 
+			$scope.id = null;
 			$scope.firstName = "";
 			$scope.lastName = "";
 			$scope.phone = "";
@@ -51,6 +71,7 @@
 
 		$scope.editSelected = function() {
 			if (selectedPerson != null) {
+				$scope.id = selectedPerson.id;
 				$scope.firstName = selectedPerson.firstName;
 				$scope.lastName = selectedPerson.lastName;
 				$scope.phone = selectedPerson.phone;
@@ -66,18 +87,25 @@
 
 			if (!selected) {
 				selectedPerson = person;
+				$scope.editSelected();
 			}
 		};
 
 		$scope.noPersonIsSelected = function() {
 			return selectedPerson == null;
-		}
+		};
 		
 		$scope.getSelectionStyleName = function(index) {
 			if(selectedPerson == null) return '';
 			if(selectedPerson == $scope.persons[index]) return 'selected';
 			return '';
-		}
+		};
+		
+		$scope.discardChanges = function() {
+			deselectAll();
+		};
+		
+		$scope.refreshData();
 	});
 </script>
 <style type="text/css">
@@ -173,8 +201,8 @@ html,body {
 			</tr>
 		</table>
 		<div>
-			<input type="button" value="Save" /> <input type="button"
-				value="Cancel" />
+			<input type="button" value="Save" ng-click="savePerson()" /> <input type="button"
+				value="Cancel" ng-click="discardChanges()" />
 		</div>
 	</div>
 </body>

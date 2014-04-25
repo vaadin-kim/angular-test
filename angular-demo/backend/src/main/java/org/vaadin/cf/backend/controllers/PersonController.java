@@ -21,8 +21,8 @@ public class PersonController {
 		return personRepository.findAll();
 	}
 
-	@RequestMapping(value = "/addPerson", method = RequestMethod.POST)
-	public Person addPerson(@RequestBody Person person) {
+	@RequestMapping(value = "/savePerson", method = RequestMethod.POST)
+	public Person savePerson(@RequestBody Person person) {
 		personRepository.saveAndFlush(person);
 		return person;
 	}
