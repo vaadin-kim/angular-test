@@ -26,5 +26,10 @@ public class PersonController {
 		personRepository.saveAndFlush(person);
 		return person;
 	}
+	
+	@RequestMapping(value = "/removePerson", method = RequestMethod.POST)
+	public void removePerson(@RequestBody long id) {
+		personRepository.delete(id);
+	}
 
 }

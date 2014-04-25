@@ -3,9 +3,8 @@
 <head>
 <title></title>
 <script src="https://code.angularjs.org/1.2.9/angular.min.js"></script>
+<script src="http://underscorejs.org/underscore-min.js"></script>
 <script>
-	var id = 0;
-
 	var listApp = angular.module('listApp', []);
 	listApp.controller('listCtrl', function($scope, $http) {
 
@@ -27,6 +26,15 @@
 				$scope.persons.push(data);
 			});
 		};
+		
+		$scope.deleteSelected = function() {
+			$http.post('/removePerson', selectedPerson.id).success(function(data, status, headers, config) {
+				selectedPerson = null;
+				$http.get('/findAll').success(function(data) {
+					$scope.persons = data;
+				});
+			});
+		}
 
 		var deselectAll = function() {
 			$scope.persons.forEach(function(person) {
@@ -51,13 +59,12 @@
 		}
 
 		$scope.select = function(personId) {
-
-			var person = $scope.persons[personId];
-			var selected = person.selected;
+			var person = _.findWhere($scope.persons, {id: personId});
+			var selected = person == selectedPerson && person != null;
+			
 			deselectAll();
 
 			if (!selected) {
-				person.selected = true;
 				selectedPerson = person;
 			}
 		};
@@ -126,14 +133,12 @@ html,body {
 				<td>{{person.lastName}}</td>
 				<td>{{person.phone}}</td>
 				<td>{{person.email}}</td>
-				<td>{{person.selected}}</td>
 			</tr>
 		</table>
 		<div>
-			<input type="button" value="Edit" ng-disabled="noPersonIsSelected()"
-				ng-click="editSelected()" /> <input type="button" value="Delete"
-				ng-disabled="noPersonIsSelected()" ng-click="deleteSelected()" /> <input
-				type="button" value="New" ng-click="addPerson()" />
+			<input type="button" value="Edit" ng-disabled="noPersonIsSelected()" ng-click="editSelected()" /> 
+			<input type="button" value="Delete"	ng-disabled="noPersonIsSelected()" ng-click="deleteSelected()" /> 
+			<input type="button" value="New" ng-click="addPerson()" />
 		</div>
 	</div>
 	<div id="form">
