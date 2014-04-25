@@ -17,7 +17,7 @@ public class Person {
 	private String firstName;
 
 	@Column(name = "lastname")
-	private String lastname;
+	private String lastName;
 
 	@Column(name = "email")
 	private String email;
@@ -41,12 +41,12 @@ public class Person {
 		this.firstName = firstName;
 	}
 
-	public String getLastname() {
-		return lastname;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+	public void setLastName(String lastname) {
+		this.lastName = lastname;
 	}
 
 	public String getEmail() {
