@@ -1,4 +1,4 @@
-package org.vaadin.cf.backend;
+package org.vaadin.cf;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -15,4 +15,3 @@ public class Application extends SpringBootServletInitializer {
 		SpringApplication.run(Application.class, args);
 	}
 }
-
