@@ -1,8 +1,15 @@
 <!DOCTYPE html>
-<html ng-app>
+<html ng-app="listApp">
 <head>
     <title></title>
     <script src="https://code.angularjs.org/1.2.9/angular.min.js"></script>
+    <script>
+        var listApp = angular.module('listApp', []);
+        listApp.controller('listCtrl', function($scope) {
+
+            $scope.persons = [{'firstName':'foo', 'lastName':'bar'}];
+        });
+    </script>
     <style type="text/css">
     	html, body {
     		height: 100%;
@@ -34,7 +41,7 @@
     	}
     </style>
 </head>
-<body>
+<body ng-controller="listCtrl">
     <div id="table">
         <table ng-init="persons = [{firstName = nice}]">
             <thead>
@@ -44,7 +51,10 @@
                 <th>Email address</th>
             </thead>
             <tr ng-repeat="person in persons">
-                <td ng-model="p.firstName"></td>
+               <td>{{person.firstName}}</td>
+                <td>{{person.lastName}}</td>
+                <td>{{person.phoneNumber}}</td>
+                <td>{{person.emailAddress}}</td>
             </tr>
         </table>
          <div>
