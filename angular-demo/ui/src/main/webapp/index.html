@@ -31,6 +31,8 @@
                     person.selected = false;
                 });
 
+                selectedPerson = null;
+
                 $scope.firstName = "";
                 $scope.lastName = "";
                 $scope.phoneNumber = "";
@@ -58,8 +60,8 @@
                 }
             };
 
-            $scope.personIsSelected = function() {
-                return selectedPerson != null;
+            $scope.noPersonIsSelected = function() {
+                return selectedPerson == null;
             }
         });
     </script>
@@ -128,8 +130,8 @@
             </tr>
         </table>
         <div>
-            <input type="button" value="Edit" ng-enabled="personIsSelected()" ng-click="editSelected()" />
-            <input type="button" value="Delete" ng-enabled="personIsSelected()" ng-click="deleteSelected()" />
+            <input type="button" value="Edit" ng-disabled="noPersonIsSelected()" ng-click="editSelected()" />
+            <input type="button" value="Delete" ng-disabled="noPersonIsSelected()" ng-click="deleteSelected()" />
             <input type="button" value="New" ng-click="addPerson()" />
         </div>
     </div>
