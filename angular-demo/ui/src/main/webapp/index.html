@@ -8,6 +8,15 @@
         listApp.controller('listCtrl', function($scope) {
 
             $scope.persons = [{'firstName':'foo', 'lastName':'bar'}];
+
+            $scope.addPerson = function() {
+                $scope.persons.push({
+                  firstName:$scope.firstName,
+                  lastName:$scope.lastName,
+                  phoneNumber:$scope.phoneNumber,
+                  emailAddress:$scope.emailAddress
+                });
+            }
         });
     </script>
 
@@ -33,7 +42,7 @@
     <div>
         <input type="button" value="Edit" />
         <input type="button" value="Delete" />
-        <input type="button" value="New" />
+        <input type="button" value="New" ng-click="addPerson()" />
     </div>
     <div>
         <table>
@@ -43,10 +52,10 @@
             </tr>
             <tr>
                 <td>
-                    <input type="text" />
+                    <input type="text" ng-model="firstName" />
                 </td>
                 <td>
-                    <input type="text" />
+                    <input type="text" ng-model="lastName" />
                 </td>
             </tr>
             <tr>
@@ -55,8 +64,8 @@
             </tr>
             <tr>
                 <td>
-                    <input type="text" />
-                    <input type="text" />
+                    <input type="text" ng-model="phoneNumber" />
+                    <input type="text" ng-model="emailAddress" />
                 </td>
             </tr>
         </table>
