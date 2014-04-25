@@ -1,172 +1,165 @@
 <!DOCTYPE html>
 <html ng-app="listApp">
 <head>
-    <title></title>
-    <script src="https://code.angularjs.org/1.2.9/angular.min.js"></script>
-    <script>
-        var id = 0;
+<title></title>
+<script src="https://code.angularjs.org/1.2.9/angular.min.js"></script>
+<script>
+	var id = 0;
 
-        var listApp = angular.module('listApp', []);
-        listApp.controller('listCtrl', function($scope, $http) {
+	var listApp = angular.module('listApp', []);
+	listApp.controller('listCtrl', function($scope, $http) {
 
-        	$http.get('http://localhost:8080/findAll').
-            success(function(data) {
-            	$scope.persons = data;
-            });
-        	
-            var selectedPerson = null;
+		$http.get('/findAll').success(function(data) {
+			$scope.persons = data;
+		});
 
-            $scope.addPerson = function() {
-                $scope.persons.push({
-                  id:id++,
-                  firstName:$scope.firstName,
-                  lastName:$scope.lastName,
-                  phoneNumber:$scope.phoneNumber,
-                  emailAddress:$scope.emailAddress
-                });
-            };
+		var selectedPerson = null;
 
-            var deselectAll = function() {
-                $scope.persons.forEach(function(person) {
-                    person.selected = false;
-                });
+		$scope.addPerson = function() {
+			var person = {
+				firstName : $scope.firstName,
+				lastName : $scope.lastName,
+				phone : $scope.phone,
+				email : $scope.email
+			};
 
-                selectedPerson = null;
+			$http.post('/addPerson', person).success(function(data, status, headers, config) {
+				$scope.persons.push(data);
+			});
+		};
 
-                $scope.firstName = "";
-                $scope.lastName = "";
-                $scope.phoneNumber = "";
-                $scope.emailAddress = "";
-            }
+		var deselectAll = function() {
+			$scope.persons.forEach(function(person) {
+				person.selected = false;
+			});
 
-            $scope.editSelected = function() {
-                if(selectedPerson != null) {
-                    $scope.firstName = selectedPerson.firstName;
-                    $scope.lastName = selectedPerson.lastName;
-                    $scope.phone = selectedPerson.phone;
-                    $scope.email = selectedPerson.email;
-                }
-            }
+			selectedPerson = null;
 
-            $scope.select = function(personId) {
+			$scope.firstName = "";
+			$scope.lastName = "";
+			$scope.phone = "";
+			$scope.email = "";
+		}
 
-                var person = $scope.persons[personId];
-                var selected = person.selected;
-                deselectAll();
+		$scope.editSelected = function() {
+			if (selectedPerson != null) {
+				$scope.firstName = selectedPerson.firstName;
+				$scope.lastName = selectedPerson.lastName;
+				$scope.phone = selectedPerson.phone;
+				$scope.email = selectedPerson.email;
+			}
+		}
 
-                if(!selected) {
-                    person.selected = true;
-                    selectedPerson = person;
-                }
-            };
+		$scope.select = function(personId) {
 
-            $scope.noPersonIsSelected = function() {
-                return selectedPerson == null;
-            }
-        });
-    </script>
-    <style type="text/css">
-    	html, body {
-    		height: 100%;
-    		width: 100%;
-    	}
-    
-    	#table {
-    		width: 100%;
-    		height: 50%;
-    	}  	
-    	
-    	#form {
-    		width: 100%;
-    		height: 50%;
-    		border-top: solid 1px #000000;
-    	}
-    	
-    	#form table {
-    		width: 100%;
-    	}
-    	
-    	#form td input {
-    		width: 100%;
-    	}
-    	
-    	#form td {
-    		box-sizing: border-box;
-    		padding: 3px 10px;
-    	}
+			var person = $scope.persons[personId];
+			var selected = person.selected;
+			deselectAll();
 
-        .even {
-            background-color:white;
-        }
+			if (!selected) {
+				person.selected = true;
+				selectedPerson = person;
+			}
+		};
 
-        .odd {
-            background-color:silver;
-        }
+		$scope.noPersonIsSelected = function() {
+			return selectedPerson == null;
+		}
+	});
+</script>
+<style type="text/css">
+html,body {
+	height: 100%;
+	width: 100%;
+}
 
-        .selected {
-            background-color:grey;
-        }
-    </style>
+#table {
+	width: 100%;
+	height: 50%;
+}
+
+#form {
+	width: 100%;
+	height: 50%;
+	border-top: solid 1px #000000;
+}
+
+#form table {
+	width: 100%;
+}
+
+#form td input {
+	width: 100%;
+}
+
+#form td {
+	box-sizing: border-box;
+	padding: 3px 10px;
+}
+
+.even {
+	background-color: white;
+}
+
+.odd {
+	background-color: silver;
+}
+
+.selected {
+	background-color: grey;
+}
+</style>
 </head>
 <body ng-controller="listCtrl">
-    <div id="table">
-        <table>
-            <thead>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Phone number</th>
-                <th>Email address</th>
-            </thead>
-            <tr ng-repeat="person in persons"
-                ng-class-even="'even'"
-                ng-class-odd="'odd'"
-                ng-class="{selected: 'selected'}"
-                ng-click="select(person.id)">
-               <td>{{person.firstName}}</td>
-                <td>{{person.lastName}}</td>
-                <td>{{person.phone}}</td>
-                <td>{{person.email}}</td>
-                <td>{{person.selected}}</td>
-            </tr>
-        </table>
-        <div>
-            <input type="button" value="Edit" ng-disabled="noPersonIsSelected()" ng-click="editSelected()" />
-            <input type="button" value="Delete" ng-disabled="noPersonIsSelected()" ng-click="deleteSelected()" />
-            <input type="button" value="New" ng-click="addPerson()" />
-        </div>
-    </div>
-    <div id="form">
-        <table>
-            <tr>
-                <td width="30%">First name</td>
-                <td width="70%">Last name</td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="text" ng-model="firstName" />
-                </td>
-                <td>
-                    <input type="text" ng-value="lastName" />
-                </td>
-            </tr>
-            <tr>
-                <td>Phone number</td>
-                <td>Email address</td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="text" ng-value="phone" />
-                </td>
-                <td>
-                    <input type="text" ng-value="email" />
-                </td>
-            </tr>
-        </table>
-        <div>
-            <input type="button" value="Save" />
-            <input type="button" value="Cancel" />
-        </div>
-    </div>
+	<div id="table">
+		<table>
+			<thead>
+				<th>First name</th>
+				<th>Last name</th>
+				<th>Phone number</th>
+				<th>Email address</th>
+			</thead>
+			<tr ng-repeat="person in persons" ng-class-even="'even'"
+				ng-class-odd="'odd'" ng-class="{selected: 'selected'}"
+				ng-click="select(person.id)">
+				<td>{{person.firstName}}</td>
+				<td>{{person.lastName}}</td>
+				<td>{{person.phone}}</td>
+				<td>{{person.email}}</td>
+				<td>{{person.selected}}</td>
+			</tr>
+		</table>
+		<div>
+			<input type="button" value="Edit" ng-disabled="noPersonIsSelected()"
+				ng-click="editSelected()" /> <input type="button" value="Delete"
+				ng-disabled="noPersonIsSelected()" ng-click="deleteSelected()" /> <input
+				type="button" value="New" ng-click="addPerson()" />
+		</div>
+	</div>
+	<div id="form">
+		<table>
+			<tr>
+				<td width="30%">First name</td>
+				<td width="70%">Last name</td>
+			</tr>
+			<tr>
+				<td><input type="text" ng-model="firstName" /></td>
+				<td><input type="text" ng-model="lastName" /></td>
+			</tr>
+			<tr>
+				<td>Phone number</td>
+				<td>Email address</td>
+			</tr>
+			<tr>
+				<td><input type="text" ng-model="phone" /></td>
+				<td><input type="text" ng-model="email" /></td>
+			</tr>
+		</table>
+		<div>
+			<input type="button" value="Save" /> <input type="button"
+				value="Cancel" />
+		</div>
+	</div>
 </body>
 </html>
 
