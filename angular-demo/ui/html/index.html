@@ -6,6 +6,54 @@
 </head>
 <body>
     <p>Nothing here {{'yet' + '!'}}</p>
+    <div>
+        <table ng-init="persons = [{firstName = nice}]">
+            <thead>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Phone number</th>
+                <th>Email address</th>
+            </thead>
+            <tr ng-repeat="person in persons">
+                <td ng-model="p.firstName"></td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <input type="button" value="Edit" />
+        <input type="button" value="Delete" />
+        <input type="button" value="New" />
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td>First name</td>
+                <td>Last name</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+            </tr>
+            <tr>
+                <td>Phone number</td>
+                <td>Email address</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" />
+                    <input type="text" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <input type="button" value="Save" />
+        <input type="button" value="Cancel" />
+    </div>
 </body>
 </html>
 
