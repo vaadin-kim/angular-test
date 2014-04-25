@@ -177,7 +177,6 @@ html,body {
 			</tr>
 		</table>
 		<div>
-			<input class="btn btn-sm btn-default" type="button" value="Edit" ng-disabled="noPersonIsSelected()" ng-click="editSelected()" /> 
 			<input class="btn btn-sm btn-default" type="button" value="Delete"	ng-disabled="noPersonIsSelected()" ng-click="deleteSelected()" /> 
 			<input class="btn btn-sm btn-default" type="button" value="New" ng-click="addPerson()" />
 		</div>
@@ -189,16 +188,16 @@ html,body {
 				<td width="70%">Last name</td>
 			</tr>
 			<tr>
-				<td><input type="text" ng-model="firstName" /></td>
-				<td><input type="text" ng-model="lastName" /></td>
+				<td><input type="text" ng-model="firstName" class="form-control" placeholder="First name" ng-disabled="noPersonIsSelected()" /></td>
+				<td><input type="text" ng-model="lastName" class="form-control" placeholder="Last name" ng-disabled="noPersonIsSelected()" /></td>
 			</tr>
 			<tr>
 				<td>Phone number</td>
 				<td>Email address</td>
 			</tr>
 			<tr>
-				<td><input type="text" ng-model="phone" /></td>
-				<td><input type="text" ng-model="email" /></td>
+				<td><input type="text" ng-model="phone" class="form-control" placeholder="Phone number" ng-disabled="noPersonIsSelected()"/></td>
+				<td><input type="text" ng-model="email" class="form-control" placeholder="Email address" ng-disabled="noPersonIsSelected()"/></td>
 			</tr>
 		</table>
 		<div>
