@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html ng-app="listApp">
 <head>
-<title></title>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<title>Address Book</title>
 <script src="https://code.angularjs.org/1.2.9/angular.min.js"></script>
 <script src="http://underscorejs.org/underscore-min.js"></script>
 <script>
@@ -148,17 +149,17 @@ html,body {
 }
 
 .odd {
-	background-color: silver;
+	background-color: #eeeeee;
 }
 
 .selected {
-	background-color: grey;
+	background-color: #d8d8d8;
 }
 </style>
 </head>
 <body ng-controller="listCtrl">
 	<div id="table">
-		<table>
+		<table class="table table-hover">
 			<thead>
 				<th>First name</th>
 				<th>Last name</th>
@@ -176,9 +177,9 @@ html,body {
 			</tr>
 		</table>
 		<div>
-			<input type="button" value="Edit" ng-disabled="noPersonIsSelected()" ng-click="editSelected()" /> 
-			<input type="button" value="Delete"	ng-disabled="noPersonIsSelected()" ng-click="deleteSelected()" /> 
-			<input type="button" value="New" ng-click="addPerson()" />
+			<input class="btn btn-sm btn-default" type="button" value="Edit" ng-disabled="noPersonIsSelected()" ng-click="editSelected()" /> 
+			<input class="btn btn-sm btn-default" type="button" value="Delete"	ng-disabled="noPersonIsSelected()" ng-click="deleteSelected()" /> 
+			<input class="btn btn-sm btn-default" type="button" value="New" ng-click="addPerson()" />
 		</div>
 	</div>
 	<div id="form">
@@ -201,10 +202,22 @@ html,body {
 			</tr>
 		</table>
 		<div>
-			<input type="button" value="Save" ng-click="savePerson()" /> <input type="button"
-				value="Cancel" ng-click="discardChanges()" />
+			<input type="button" value="Save" 
+				ng-click="savePerson()" 
+				class="btn btn-sm btn-primary"
+				ng-disabled="noPersonIsSelected()" /> 
+				
+			<input type="button" value="Cancel" 
+				ng-click="discardChanges()" 
+				class="btn btn-sm btn-link"
+				ng-disabled="noPersonIsSelected()" />
 		</div>
 	</div>
+	
+	 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
 
