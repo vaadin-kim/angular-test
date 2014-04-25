@@ -4,18 +4,58 @@
     <title></title>
     <script src="https://code.angularjs.org/1.2.9/angular.min.js"></script>
     <script>
+        var id = 0;
+
         var listApp = angular.module('listApp', []);
         listApp.controller('listCtrl', function($scope) {
 
-            $scope.persons = [{'firstName':'foo', 'lastName':'bar'}];
+            $scope.persons = [{'id':id++, 'firstName':'foo', 'lastName':'bar'}];
+            var selectedPerson = null;
 
             $scope.addPerson = function() {
                 $scope.persons.push({
+                  id:id++,
                   firstName:$scope.firstName,
                   lastName:$scope.lastName,
                   phoneNumber:$scope.phoneNumber,
                   emailAddress:$scope.emailAddress
                 });
+            };
+
+            var deselectAll = function() {
+                $scope.persons.forEach(function(person) {
+                    person.selected = false;
+                });
+
+                $scope.firstName = "";
+                $scope.lastName = "";
+                $scope.phoneNumber = "";
+                $scope.emailAddress = "";
+            }
+
+            $scope.editSelected = function() {
+                if(selectedPerson != null) {
+                    $scope.firstName = selectedPerson.firstName;
+                    $scope.lastName = selectedPerson.lastName;
+                    $scope.phoneNumber = selectedPerson.phoneNumber;
+                    $scope.emailAddress = selectedPerson.emailAddress;
+                }
+            }
+
+            $scope.select = function(personId) {
+
+                var person = $scope.persons[personId];
+                var selected = person.selected;
+                deselectAll();
+
+                if(!selected) {
+                    person.selected = true;
+                    selectedPerson = person;
+                }
+            };
+
+            $scope.personIsSelected = function() {
+                return selectedPerson != null;
             }
         });
     </script>
@@ -48,27 +88,44 @@
     		box-sizing: border-box;
     		padding: 3px 10px;
     	}
+
+        .even {
+            background-color:white;
+        }
+
+        .odd {
+            background-color:silver;
+        }
+
+        .selected {
+            background-color:grey;
+        }
     </style>
 </head>
 <body ng-controller="listCtrl">
     <div id="table">
-        <table ng-init="persons = [{firstName = nice}]">
+        <table>
             <thead>
                 <th>First name</th>
                 <th>Last name</th>
                 <th>Phone number</th>
                 <th>Email address</th>
             </thead>
-            <tr ng-repeat="person in persons">
+            <tr ng-repeat="person in persons"
+                ng-class-even="'even'"
+                ng-class-odd="'odd'"
+                ng-class="{selected: 'selected'}"
+                ng-click="select(person.id)">
                <td>{{person.firstName}}</td>
                 <td>{{person.lastName}}</td>
                 <td>{{person.phoneNumber}}</td>
                 <td>{{person.emailAddress}}</td>
+                <td>{{person.selected}}</td>
             </tr>
         </table>
         <div>
-            <input type="button" value="Edit" />
-            <input type="button" value="Delete" />
+            <input type="button" value="Edit" ng-enabled="personIsSelected()" ng-click="editSelected()" />
+            <input type="button" value="Delete" ng-enabled="personIsSelected()" ng-click="deleteSelected()" />
             <input type="button" value="New" ng-click="addPerson()" />
         </div>
     </div>
@@ -83,7 +140,7 @@
                     <input type="text" ng-model="firstName" />
                 </td>
                 <td>
-                    <input type="text" ng-model="lastName" />
+                    <input type="text" ng-value="lastName" />
                 </td>
             </tr>
             <tr>
@@ -92,10 +149,10 @@
             </tr>
             <tr>
                 <td>
-                    <input type="text" ng-model="phoneNumber" />
+                    <input type="text" ng-value="phoneNumber" />
                 </td>
                 <td>
-                    <input type="text" ng-model="emailAddress" />
+                    <input type="text" ng-value="emailAddress" />
                 </td>
             </tr>
         </table>
